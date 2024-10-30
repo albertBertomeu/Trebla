@@ -1,0 +1,69 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="trebla.player_list">
+      <field name="name">trebla player list</field>
+      <field name="model">trebla.player</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="surname"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="trebla.action_player_window">
+      <field name="name"> player</field>
+      <field name="res_model">trebla.player</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+     <record model="ir.actions.act_window" id="trebla.action_race_window">
+      <field name="name"> race</field>
+      <field name="res_model">trebla.race</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+     <record model="ir.actions.act_window" id="trebla.action_armour_window">
+      <field name="name"> armour</field>
+      <field name="res_model">trebla.armour</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="trebla.action_server">
+      <field name="name">trebla server</field>
+      <field name="model_id" ref="model_trebla_trebla"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Trebla" id="trebla.menu_root"/>
+    <!-- menu categories -->
+    <menuitem name="Menu" id="trebla.menu_1" parent="trebla.menu_root"/>
+    <!-- actions -->
+    <menuitem name="Player" id="trebla.menu_player_list" parent="trebla.menu_1"
+              action="trebla.action_player_window"/>
+    <menuitem name="Race" id="trebla.menu_race_list" parent="trebla.menu_1"
+              action="trebla.action_race_window"/>
+    <menuitem name="Armour" id="trebla.menu_armour_list" parent="trebla.menu_1"
+              action="trebla.action_armour_window"/>
+
+
+  </data>
+</odoo>

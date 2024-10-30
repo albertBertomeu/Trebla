@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_trebla_player,trebla.player,model_trebla_player,base.group_user,1,1,1,1
+access_trebla_race,trebla.race,model_trebla_race,base.group_user,1,1,1,1
+access_trebla_armour,trebla.armour,model_trebla_armour,base.group_user,1,1,1,1
