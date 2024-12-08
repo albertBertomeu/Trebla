@@ -6,12 +6,161 @@
       <field name="name">trebla player list</field>
       <field name="model">trebla.player</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree decoration-info="level &lt; 20" decoration-warning="level &gt;21">
           <field name="name"/>
           <field name="surname"/>
+           <field name="level"/>
         </tree>
       </field>
     </record>
+
+      <record model="ir.ui.view" id="trebla.racer_list">
+      <field name="name">trebla race list</field>
+      <field name="model">trebla.race</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="clan"/>
+        </tree>
+      </field>
+    </record>
+
+      <record model="ir.ui.view" id="trebla.armour_list">
+      <field name="name">trebla armour list</field>
+      <field name="model">trebla.armour</field>
+      <field name="arch" type="xml">
+        <tree >
+          <field name="name"/>
+          <field name="atac"/>
+            <field name="defensa"/>
+        </tree>
+      </field>
+    </record>
+
+ <record model="ir.ui.view" id="trebla.player_form">
+            <field name="name">trebla player form</field>
+            <field name="model">trebla.player</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <header>
+                            <button name="add_level" icon="fa-star-o" type="object"
+                                    string="afegir un nivell"/>
+                        </header>
+                        <field name="photo" widget="image"/>
+                        <group>
+                            <group>
+                                <separator string="Personal data"/>
+                                <field name="name"/>
+                                <field name="surname"/>
+                                <field name="birth_year"/>
+                                <field name="last_login"/>
+                            </group>
+                            <group>
+                                <separator string="Character Data"/>
+                                <field name="level" />
+                                <field name="clan"/>
+                                <field name="race_id"/>
+                                <field name="atac_total"/>
+                                <field name="defensa_total"/>
+                            </group>
+                            <notebook>
+                                <page string="Armours">
+                                    <field name="armour">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="atac"/>
+                                            <field name="defensa"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="trebla.player_search">
+            <field name="name">trebla player search</field>
+            <field name="model">trebla.player</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="race_id" string="raza" filter_domain="[('race_id', '=', self)]"/>
+                    <filter name="group_by_race" string="Group_by_race" context="{'group_by': 'race_id'}"></filter>
+
+                </search>
+          </field>
+    </record>
+
+      <record model="ir.ui.view" id="trebla.armour_search">
+            <field name="name">trebla armour search</field>
+            <field name="model">trebla.armour</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="atac" string="Min atac" filter_domain="[('atac', '>=', self)]"/>
+                    <field name="defensa" string="Min defensa" filter_domain="[('defensa','>=',self)]"/>
+                    <filter name="weapons" string="armas" domain="[('atac','&gt;=',8)]"></filter>
+                    <filter name="armour" string="armaduras" domain="[('defensa','&gt;=',8)]"></filter>
+
+                </search>
+          </field>
+    </record>
+
+        <record model="ir.ui.view" id="trebla.player_kanban">
+            <field name="name">trebla player kanban</field>
+            <field name="model">trebla.player</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="race_id" on_create="quick_create"
+                        quick_create_view="trebla.quick_create_trebla_form">
+                    <field name="armour"></field>  <!--asi van els fils que va a utilitzar el kanban-->
+                    <field name="race_id"></field>
+                    <field name="name"></field>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class=" oe_kanban_color_{{kanban_getcolor(record.race_id.raw_value)}} oe_kanban_global_click o_kanban_has_image_fill">
+                                <a type="open">
+                                    <img class="oe_kanban_image"
+                                         t-att-alt="record.name.value"
+                                         t-att-src="kanban_image('trebla.player', 'photo' , record.id.value)"/>
+                                </a>
+
+                                <div t-attf-class="oe_kanban_content">
+                                    <h4>
+                                        <a type="edit">
+                                            <field name="name"></field>
+                                        </a>
+                                    </h4>
+                                    <ul>
+                                        <li>armour:
+                                            <field name="armour"></field>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+         <record model="ir.ui.view" id="trebla.quick_create_trebla_form">
+            <field name="name">trebla.player form quickcreate</field>
+            <field name="model">trebla.player</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                    <field name="name"/>
+                    <field name="clan"/>
+                    <field name="race_id"/>
+                        <field name="level"/>
+                    </group>
+                </form>
+            </field>
+        </record>
 
 
     <!-- actions opening views on models -->
@@ -19,7 +168,7 @@
     <record model="ir.actions.act_window" id="trebla.action_player_window">
       <field name="name"> player</field>
       <field name="res_model">trebla.player</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,kanban</field>
     </record>
 
      <record model="ir.actions.act_window" id="trebla.action_race_window">
